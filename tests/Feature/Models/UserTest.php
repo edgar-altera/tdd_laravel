@@ -17,7 +17,7 @@ class UserTest extends TestCase
      */
     public function test_user_has_many_posts()
     {
-        $user = new User();
+        $user = User::factory()->create();
 
         $this->assertInstanceOf(Collection::class, $user->posts);
     }
