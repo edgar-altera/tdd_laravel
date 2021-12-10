@@ -15,7 +15,7 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_has_posts()
+    public function test_user_has_many_posts()
     {
         $user = new User();
 
