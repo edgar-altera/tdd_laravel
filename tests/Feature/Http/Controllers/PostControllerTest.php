@@ -10,6 +10,8 @@ use Tests\TestCase;
 
 class PostControllerTest extends TestCase
 {
+    use WithFaker;
+
     /**
      * A basic feature test example.
      *
@@ -41,5 +43,25 @@ class PostControllerTest extends TestCase
         ;
 
         $this->assertDatabaseHas('posts', $post);
+    }
+
+    public function test_update()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $data = [
+            'title' => $this->faker->sentence(3),
+            'body'  => $this->faker->text(200),
+        ];
+
+        $this
+            ->actingAs($user)
+            ->put("posts/$post->id", $data)
+            ->assertRedirect("posts/$post->id/edit")
+        ;
+
+        $this->assertDatabaseHas('posts', $data);
     }
 }
