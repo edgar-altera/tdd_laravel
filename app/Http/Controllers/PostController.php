@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 
@@ -40,7 +41,11 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        // $this->authorize('create', Post::class);
+
+        Post::create($request->all());
+
+        return redirect()->route('posts.index');
     }
 
     /**
