@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostControllerTest extends TestCase
 {
@@ -63,5 +64,31 @@ class PostControllerTest extends TestCase
         ;
 
         $this->assertDatabaseHas('posts', $data);
+    }
+
+    public function test_validate_store()
+    {
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->post('posts', [])
+            ->assertStatus(Response::HTTP_FOUND)
+            ->assertSessionHasErrors(['user_id', 'title', 'body'])
+        ;
+    }
+
+    public function test_validate_update()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->put("posts/$post->id", [])
+            ->assertStatus(Response::HTTP_FOUND)
+            ->assertSessionHasErrors(['title', 'body'])
+        ;
     }
 }
