@@ -114,7 +114,7 @@ class PostControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $post = Post::factory()->create();
+        $post = Post::factory()->create(['user_id' => $user->id]);
 
         $this
             ->actingAs($user)
@@ -127,6 +127,25 @@ class PostControllerTest extends TestCase
                 'id' => $post->id,
                 'title' => $post->title,
                 'body' => $post->body
+            ]
+        );
+    }
+
+    public function test_policy_destroy()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->delete("posts/$post->id")
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+        ;
+
+        $this->assertDatabaseHas('posts', 
+            [
+                'id' => $post->id,
             ]
         );
     }
