@@ -50,7 +50,7 @@ class PostControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $post = Post::factory()->create();
+        $post = Post::factory()->create(['user_id' => $user->id]);
 
         $data = [
             'title' => $this->faker->sentence(3),
@@ -89,6 +89,24 @@ class PostControllerTest extends TestCase
             ->put("posts/$post->id", [])
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors(['title', 'body'])
+        ;
+    }
+
+    public function test_policy_update()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $data = [
+            'title' => $this->faker->sentence(3),
+            'body'  => $this->faker->text(200),
+        ];
+
+        $this
+            ->actingAs($user)
+            ->put("posts/$post->id", $data)
+            ->assertStatus(Response::HTTP_FORBIDDEN)
         ;
     }
 
