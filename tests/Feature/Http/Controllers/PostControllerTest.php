@@ -29,6 +29,35 @@ class PostControllerTest extends TestCase
         $this->delete('posts/1')->assertRedirect('login');    // destroy
     }
 
+    public function test_index_empty()
+    {
+        $user = User::factory()->create();
+        
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('posts')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertSee('No hay posts creados')
+        ;
+    }
+
+    public function test_index_with_data()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
+            ->get('posts')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertSee($post->id)
+            ->assertSee($post->title)
+        ;
+    }
+
     public function test_store()
     {
         $user = User::factory()->create();

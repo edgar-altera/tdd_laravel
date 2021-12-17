@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -20,7 +21,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Auth::user()->posts;
+
+        return view('posts.index', compact('posts'));
     }
 
     /**
