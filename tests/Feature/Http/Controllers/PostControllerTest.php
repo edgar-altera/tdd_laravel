@@ -91,4 +91,25 @@ class PostControllerTest extends TestCase
             ->assertSessionHasErrors(['title', 'body'])
         ;
     }
+
+    public function test_destroy()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->delete("posts/$post->id")
+            ->assertRedirect('posts');
+        ;
+
+        $this->assertDatabaseMissing('posts', 
+            [
+                'id' => $post->id,
+                'title' => $post->title,
+                'body' => $post->body
+            ]
+        );
+    }
 }
