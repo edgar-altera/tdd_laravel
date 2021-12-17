@@ -35,8 +35,6 @@ class PostControllerTest extends TestCase
 
         $post = Post::factory()->definition();
 
-        // $post['user_id'] = $user->id;
-
         $this
             ->actingAs($user)
             ->post('posts', $post)
@@ -64,6 +62,27 @@ class PostControllerTest extends TestCase
         ;
 
         $this->assertDatabaseHas('posts', $data);
+    }
+
+    public function test_destroy()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
+            ->delete("posts/$post->id")
+            ->assertRedirect('posts');
+        ;
+
+        $this->assertDatabaseMissing('posts', 
+            [
+                'id' => $post->id,
+                'title' => $post->title,
+                'body' => $post->body
+            ]
+        );
     }
 
     public function test_validate_store()
@@ -108,27 +127,6 @@ class PostControllerTest extends TestCase
             ->put("posts/$post->id", $data)
             ->assertStatus(Response::HTTP_FORBIDDEN)
         ;
-    }
-
-    public function test_destroy()
-    {
-        $user = User::factory()->create();
-
-        $post = Post::factory()->create(['user_id' => $user->id]);
-
-        $this
-            ->actingAs($user)
-            ->delete("posts/$post->id")
-            ->assertRedirect('posts');
-        ;
-
-        $this->assertDatabaseMissing('posts', 
-            [
-                'id' => $post->id,
-                'title' => $post->title,
-                'body' => $post->body
-            ]
-        );
     }
 
     public function test_policy_destroy()
