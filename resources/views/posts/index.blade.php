@@ -13,6 +13,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Title</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -20,10 +21,11 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $post->id }}</td>
                                 <td class="border px-4 py-2">{{ $post->title }}</td>
+                                <td><a href="{{ route('posts.show', $post->id) }}">Ver</a></td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="border px-4 py-2">
+                                <td colspan="3" class="border px-4 py-2">
                                     No hay posts creados
                                 </td>
                             </tr>

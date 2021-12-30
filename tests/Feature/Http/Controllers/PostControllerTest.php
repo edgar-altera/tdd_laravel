@@ -58,6 +58,21 @@ class PostControllerTest extends TestCase
         ;
     }
 
+    public function test_show()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
+            ->get("posts/$post->id")
+            ->assertStatus(Response::HTTP_OK)
+            ->assertSee($post->id)
+            ->assertSee($post->title)
+        ;
+    }
+
     public function test_store()
     {
         $user = User::factory()->create();
@@ -137,6 +152,19 @@ class PostControllerTest extends TestCase
             ->put("posts/$post->id", [])
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors(['title', 'body'])
+        ;
+    }
+
+    public function test_policy_show()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get("posts/$post->id")
+            ->assertStatus(Response::HTTP_FORBIDDEN)
         ;
     }
 
