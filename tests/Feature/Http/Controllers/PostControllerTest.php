@@ -88,6 +88,21 @@ class PostControllerTest extends TestCase
         $this->assertDatabaseHas('posts', $post);
     }
 
+    public function test_edit()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
+            ->get("posts/$post->id/edit")
+            ->assertStatus(Response::HTTP_OK)
+            ->assertSee($post->id)
+            ->assertSee($post->title)
+        ;
+    }
+
     public function test_update()
     {
         $user = User::factory()->create();
@@ -164,6 +179,19 @@ class PostControllerTest extends TestCase
         $this
             ->actingAs($user)
             ->get("posts/$post->id")
+            ->assertStatus(Response::HTTP_FORBIDDEN)
+        ;
+    }
+
+    public function test_policy_edit()
+    {
+        $user = User::factory()->create();
+
+        $post = Post::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get("posts/$post->id/edit")
             ->assertStatus(Response::HTTP_FORBIDDEN)
         ;
     }

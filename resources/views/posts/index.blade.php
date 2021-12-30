@@ -21,7 +21,10 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ $post->id }}</td>
                                 <td class="border px-4 py-2">{{ $post->title }}</td>
-                                <td><a href="{{ route('posts.show', $post->id) }}">Ver</a></td>
+                                <td>
+                                    <a href="{{ route('posts.show', $post->id) }}">Ver</a>
+                                    <a href="{{ route('posts.edit', $post->id) }}">Editar</a>
+                                </td>
                             </tr>
                         @empty
                             <tr>
