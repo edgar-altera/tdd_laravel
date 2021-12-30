@@ -25,6 +25,11 @@
                                 <td>
                                     <a href="{{ route('posts.show', $post->id) }}">Ver</a>
                                     <a href="{{ route('posts.edit', $post->id) }}">Editar</a>
+                                    <form method="post" action="{{ route('posts.destroy', $post->id) }}">
+                                        @csrf
+                                        @method('DELETE') 
+                                        <input type="submit" value="Eliminar">   
+                                    </form>
                                 </td>
                             </tr>
                         @empty
