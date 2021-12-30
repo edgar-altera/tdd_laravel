@@ -58,6 +58,19 @@ class PostControllerTest extends TestCase
         ;
     }
 
+    public function test_create()
+    {
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->get('posts/create')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertSee('Titulo')
+            ->assertSee('Contenido')
+        ;
+    }
+
     public function test_show()
     {
         $user = User::factory()->create();

@@ -2,6 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Posts
+            <a href="{{ route('posts.create') }}" class="bg-blue-500 text-gray font-bold py-2 px-4 rounded-md">Nuevo</a>
         </h2>
     </x-slot>
 
